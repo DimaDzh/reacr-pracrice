@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-export const CharactersItem = ({ created, name }) => {
+export const CharactersItem = ({ item, handleDelete, handleEdit }) => {
+  const { created, name } = item;
   const [isEdit, setIsEdit] = useState(false);
   const [value, setValue] = useState(name);
 
@@ -12,12 +13,13 @@ export const CharactersItem = ({ created, name }) => {
     setIsEdit((edit) => !edit);
   };
 
-  const onSave = () => {
-    // ваш код
+  const onSave = (newName, created) => {
+    handleEdit(newName, created);
+    setIsEdit(false);
   };
 
-  const onDelete = () => {
-    // ваш код
+  const onDelete = (created) => {
+    handleDelete(created);
   };
 
   return (
@@ -32,12 +34,12 @@ export const CharactersItem = ({ created, name }) => {
           {!isEdit && (
             <div>
               <button onClick={toggleEditMode}>Edit</button>
-              <button onClick={onDelete}>X</button>
+              <button onClick={() => onDelete(created)}>X</button>
             </div>
           )}
           {isEdit && (
             <div>
-              <button onClick={onSave}>Save</button>
+              <button onClick={() => onSave(value, created)}>Save</button>
               <button onClick={toggleEditMode}>Cancel</button>
             </div>
           )}

@@ -1,29 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CharactersList } from "./CharactersList/CharactersList";
+import { getItemSucsess, deleteItem, editItem } from "../../store/actions.js";
+import { useStore } from "../../store/useStore";
 
 export const HomePage = () => {
-  const [data, setData] = useState([]);
+  const [state, dispatch] = useStore([]);
 
   useEffect(() => {
     fetch("https://rickandmortyapi.com/api/character")
       .then((response) => response.json())
       .then((data) => {
-        setData(data.results);
+        dispatch(getItemSucsess(data.results));
       });
   }, []);
 
-  const handleDelete = (id) => {
-    // ваш код
+  const handleEdit = (id, newValue) => {
+    dispatch(editItem(id, newValue));
   };
 
-  const handleEdit = () => {
-    // ваш код
+  const handleDelete = (id) => {
+    dispatch(deleteItem(id));
   };
 
   return (
     <main>
       <section>
-        <CharactersList list={data} />
+        <CharactersList
+          list={state.data}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+        />
       </section>
     </main>
   );
